@@ -5,6 +5,8 @@ use piston_window::*;
 use piston_window::types::Color;
 use rand::Rng;
 
+mod game;
+
 const BACK_COLOR: Color = [0.5, 0.5, 0.5, 1.0];
 const BLOCK_SIZE: f64 = 25.0;
 const STEP: f64 = 10.0;
@@ -24,6 +26,7 @@ struct Pipe {
 // returns true if the two rectangles intersect
 fn rects_intersect(ax: f64, ay: f64, aw: f64, ah: f64, bx: f64, by: f64, bw: f64, bh: f64) -> bool {
     ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by
+    && ax + aw > bx && ax < bx + bw && ay + ah > by && ay < by + bh
 }
 
 fn main() {
