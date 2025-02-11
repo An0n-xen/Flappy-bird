@@ -1,34 +1,31 @@
-use piston_window::*;
 use rand::Rng;
 
 // Constants
 pub const BACK_COLOR: [f32; 4] = [0.5, 0.5, 0.5, 1.0];
 pub const BLOCK_SIZE: f64 = 25.0;
-pub const STEP: f64 = 10.0;
+
 pub const GAP_SIZE: f64 = 90.0;
 pub const WINDOW_HEIGHT: f64 = 360.0;
 pub const WINDOW_WIDTH: f64 = 640.0;
-pub const PIPE_SPEED: f64 = 0.6;
+pub const PIPE_SPEED: f64 = 1.0;
 pub const GRAVITY: f64 = 0.2;
 pub const JUMP_IMPULSE: f64 = -5.0;
 
 pub struct Pipe {
-    x: f64,
-    gap_y: f64,
+    pub x: f64,
+    pub gap_y: f64,
 }
 
 pub struct Game{
-    pipes: Vec<Pipe>,
-    block_x: f64,
-    block_y: f64,
-    vel_y: f64,
-    width: i32,
-    height: i32,
-    game_over: bool,
+    pub pipes: Vec<Pipe>,
+    pub block_x: f64,
+    pub block_y: f64,
+    pub vel_y: f64,
+    pub game_over: bool,
 }
 
 impl Game {
-    pub fn new(width: i32, height: i32, pipe_count: i32) -> Game {
+    pub fn new(pipe_count: i32) -> Game {
         let mut rng = rand::rng();
         let pipes: Vec<Pipe> = (0..pipe_count).map(
             |i| Pipe {
@@ -42,8 +39,6 @@ impl Game {
             block_x: 50.0,
             block_y: WINDOW_HEIGHT / 2.0,
             vel_y: 0.0,
-            width: width,
-            height: height,
             game_over: false,
         }
     }
