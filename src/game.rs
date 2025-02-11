@@ -7,7 +7,7 @@ pub const BLOCK_SIZE: f64 = 25.0;
 pub const GAP_SIZE: f64 = 90.0;
 pub const WINDOW_HEIGHT: f64 = 360.0;
 pub const WINDOW_WIDTH: f64 = 640.0;
-pub const PIPE_SPEED: f64 = 1.0;
+pub const PIPE_SPEED: f64 = 2.0;
 pub const GRAVITY: f64 = 0.2;
 pub const JUMP_IMPULSE: f64 = -5.0;
 
@@ -85,25 +85,29 @@ impl Game {
 
     fn check_collisions(&mut self) {
         for pipe in &self.pipes {
-            let bottom_height = if pipe.gap_y - GAP_SIZE / 2.0 > 0.0 {
-                pipe.gap_y - GAP_SIZE / 2.0
-            } else {
-                0.0
-            };
-            let top_height = if pipe.gap_y + GAP_SIZE / 2.0 < WINDOW_HEIGHT {
-                WINDOW_HEIGHT - (pipe.gap_y + GAP_SIZE / 2.0)
-            } else {
-                0.0
-            };
+            // Calculate the heights of the top and bottom pipes
+            let bottom_pipe_height = pipe.gap_y - GAP_SIZE / 2.0;
+            let top_pipe_y = pipe.gap_y + GAP_SIZE / 2.0;
+            let top_pipe_height = WINDOW_HEIGHT - top_pipe_y;
 
-            if rects_intersect(
-                self.block_x, self.block_y, BLOCK_SIZE, BLOCK_SIZE,
-                pipe.x, 0.0, BLOCK_SIZE, bottom_height
-            ) || rects_intersect(
-                self.block_x, self.block_y, BLOCK_SIZE, BLOCK_SIZE,
-                pipe.x, pipe.gap_y + GAP_SIZE / 2.0, BLOCK_SIZE, top_height
-            ) {
-                self.game_over = true;
+            // Check collision with bottom pipe
+            if bottom_pipe_height > 0.0 {
+                if rects_intersect(
+                    self.block_x, self.block_y, BLOCK_SIZE, BLOCK_SIZE,
+                    pipe.x, 0.0, BLOCK_SIZE, bottom_pipe_height
+                ) {
+                    self.game_over = true;
+                }
+            }
+            
+            // Check collision with top pipe
+            if top_pipe_height > 0.0 {
+                if rects_intersect(
+                    self.block_x, self.block_y, BLOCK_SIZE, BLOCK_SIZE,
+                    pipe.x, top_pipe_y, BLOCK_SIZE, top_pipe_height
+                ) {
+                    self.game_over = true;
+                }
             }
         }
 
@@ -111,7 +115,6 @@ impl Game {
         if self.block_y < 0.0 || self.block_y + BLOCK_SIZE > WINDOW_HEIGHT {
             self.game_over = true;
         }
-
     }
 }
 

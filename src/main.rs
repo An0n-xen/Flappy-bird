@@ -32,11 +32,6 @@ fn main() {
         window.draw_2d(&event, |c, g, _| {
             clear(BACK_COLOR, g);
 
-            // Flip coordinate system: origin is bottom left
-            let flipped_transform = c.transform
-                .trans(0.0, WINDOW_HEIGHT)
-                .scale(1.0, -1.0);
-
             // Draw pipes
             for pipe in &game.pipes {
                 let bottom_height = if pipe.gap_y - GAP_SIZE / 2.0 > 0.0 {
@@ -52,13 +47,13 @@ fn main() {
                 rectangle(
                     [1.0, 0.0, 0.0, 1.0],
                     [pipe.x, 0.0, BLOCK_SIZE, bottom_height],
-                    flipped_transform,
+                    c.transform,
                     g,
                 );
                 rectangle(
                     [1.0, 0.0, 0.0, 1.0],
                     [pipe.x, pipe.gap_y + GAP_SIZE / 2.0, BLOCK_SIZE, top_height],
-                    flipped_transform,
+                    c.transform,
                     g,
                 );
             }
